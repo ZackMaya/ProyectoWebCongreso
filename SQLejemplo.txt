@@ -1,0 +1,207 @@
+﻿-- phpMyAdmin SQL Dump
+-- version 3.5.1
+-- http://www.phpmyadmin.net
+--
+-- Servidor: localhost
+-- Tiempo de generación: 30-03-2016 a las 13:59:11
+-- Versión del servidor: 5.5.24-log
+-- Versión de PHP: 5.4.3
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Base de datos: `ejemplo`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `codigopostal`
+--
+
+CREATE TABLE IF NOT EXISTS `codigopostal` (
+  `id_cp` int(10) NOT NULL AUTO_INCREMENT,
+  `codigopostal` int(200) NOT NULL,
+  `colonia` varchar(200) NOT NULL,
+  `delegacion` varchar(200) NOT NULL,
+  `estado` varchar(200) NOT NULL,
+  PRIMARY KEY (`id_cp`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Volcado de datos para la tabla `codigopostal`
+--
+
+INSERT INTO `codigopostal` (`id_cp`, `codigopostal`, `colonia`, `delegacion`, `estado`) VALUES
+(1, 1111, 'San Lorenzo tezonco', 'Iztapalapa', 'Ciudad de México');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `comentario`
+--
+
+CREATE TABLE IF NOT EXISTS `comentario` (
+  `id_comentario` int(100) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(200) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `asunto` varchar(100) NOT NULL,
+  `comentarios` varchar(100) NOT NULL,
+  `id_evento` int(10) NOT NULL,
+  PRIMARY KEY (`id_comentario`),
+  UNIQUE KEY `id_evento` (`id_evento`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Volcado de datos para la tabla `comentario`
+--
+
+INSERT INTO `comentario` (`id_comentario`, `nombre`, `email`, `asunto`, `comentarios`, `id_evento`) VALUES
+(1, 'Ernesto', 'ingnetozack@hotmail.com', 'proyecto IA', 'Proyecto pendiente', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `comentariousuario`
+--
+
+CREATE TABLE IF NOT EXISTS `comentariousuario` (
+  `id_comentarioUsuario` int(100) NOT NULL AUTO_INCREMENT,
+  `email` varchar(100) NOT NULL,
+  `asunto` varchar(100) NOT NULL,
+  `comentarios` varchar(200) NOT NULL,
+  `id_evento` int(10) NOT NULL,
+  PRIMARY KEY (`id_comentarioUsuario`),
+  KEY `email` (`email`),
+  KEY `id_evento` (`id_evento`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `evento`
+--
+
+CREATE TABLE IF NOT EXISTS `evento` (
+  `id_evento` int(10) NOT NULL DEFAULT '0',
+  `nombreEvento` varchar(200) NOT NULL,
+  `id_universidad` int(10) NOT NULL,
+  `horario` datetime NOT NULL,
+  PRIMARY KEY (`id_evento`),
+  KEY `id_universidad` (`id_universidad`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `evento`
+--
+
+INSERT INTO `evento` (`id_evento`, `nombreEvento`, `id_universidad`, `horario`) VALUES
+(1, 'Proyecto Arduino', 1, '2016-03-28 09:00:00'),
+(2, 'Impresiones 3D para protesís', 1, '2016-03-28 10:30:00'),
+(3, 'Programacion de Inteligencia Artificial', 1, '2016-03-28 14:00:00'),
+(4, 'Batalla de Robots, The Epic Battle Robots-UACM', 1, '2016-03-28 15:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `persona`
+--
+
+CREATE TABLE IF NOT EXISTS `persona` (
+  `id_usuario` int(100) NOT NULL AUTO_INCREMENT,
+  `email` varchar(100) NOT NULL,
+  `nombre` varchar(200) NOT NULL,
+  `password` varchar(35) NOT NULL,
+  `edad` int(100) NOT NULL,
+  PRIMARY KEY (`id_usuario`),
+  UNIQUE KEY `id_usuario` (`id_usuario`),
+  KEY `email` (`email`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `registroxusuario`
+--
+
+CREATE TABLE IF NOT EXISTS `registroxusuario` (
+  `id_registro` int(200) NOT NULL AUTO_INCREMENT,
+  `email` varchar(100) NOT NULL,
+  `id_evento` int(11) NOT NULL,
+  `lugar` int(100) NOT NULL,
+  `boletos` int(10) NOT NULL,
+  PRIMARY KEY (`id_registro`),
+  UNIQUE KEY `lugar` (`lugar`),
+  UNIQUE KEY `id_email` (`email`),
+  UNIQUE KEY `id_evento` (`id_evento`),
+  KEY `id_evento_idx` (`id_evento`),
+  KEY `id_lugar` (`lugar`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `universidad`
+--
+
+CREATE TABLE IF NOT EXISTS `universidad` (
+  `id_universidad` int(10) NOT NULL DEFAULT '0',
+  `nombreUniversidad` varchar(200) DEFAULT NULL,
+  `plantel` varchar(200) NOT NULL,
+  `id_cp` int(10) NOT NULL,
+  PRIMARY KEY (`id_universidad`),
+  KEY `id_cp` (`id_cp`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `universidad`
+--
+
+INSERT INTO `universidad` (`id_universidad`, `nombreUniversidad`, `plantel`, `id_cp`) VALUES
+(1, 'UACM', 'San Lorenzo Tezonco', 1);
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `comentario`
+--
+ALTER TABLE `comentario`
+  ADD CONSTRAINT `comentario_ibfk_1` FOREIGN KEY (`id_evento`) REFERENCES `evento` (`id_evento`);
+
+--
+-- Filtros para la tabla `comentariousuario`
+--
+ALTER TABLE `comentariousuario`
+  ADD CONSTRAINT `comentariousuario_ibfk_3` FOREIGN KEY (`email`) REFERENCES `persona` (`email`),
+  ADD CONSTRAINT `comentariousuario_ibfk_2` FOREIGN KEY (`id_evento`) REFERENCES `evento` (`id_evento`);
+
+--
+-- Filtros para la tabla `evento`
+--
+ALTER TABLE `evento`
+  ADD CONSTRAINT `id_universidad` FOREIGN KEY (`id_universidad`) REFERENCES `universidad` (`id_universidad`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `registroxusuario`
+--
+ALTER TABLE `registroxusuario`
+  ADD CONSTRAINT `registroxusuario_ibfk_2` FOREIGN KEY (`id_evento`) REFERENCES `evento` (`id_evento`);
+
+--
+-- Filtros para la tabla `universidad`
+--
+ALTER TABLE `universidad`
+  ADD CONSTRAINT `universidad_ibfk_1` FOREIGN KEY (`id_cp`) REFERENCES `codigopostal` (`id_cp`);
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

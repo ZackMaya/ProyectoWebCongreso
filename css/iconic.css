@@ -1,0 +1,12 @@
+
+.iconic {
+	color:inherit;
+	font-family: "IconicStroke";
+	font-size: 38px;
+	line-height: 20px;
+	vertical-align: middle;
+}
+
+a.iconic:hover {
+	color:inherit;
+}
